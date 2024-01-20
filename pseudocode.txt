@@ -1,0 +1,257 @@
+DECLARE INT num_of_cars_1[], num_of_cars_2[]
+
+OUTPUT "Number of cars on road 1:"
+INPUT num_of_cars_1[]
+OUTPUT "Number of cars on road 2:"
+INPUT num_of_cars_2[]
+
+DECLARE STRING prev_output_value = ""
+
+DECLARE CELL ARRAY num_of_cars
+
+DECLARE INT SIZE=length(num_of_cars_1)
+
+DECLARE INT velocity=1350, frequency1[SIZE], frequency2[SIZE], angular_frequency[SIZE]
+
+DECLARE INT T
+
+DECLARE CHARACTER t
+
+DECLARE DERIVATIVE EQUATION f, sine_function[SIZE]
+
+DECLARE FLOAT sine_fuction_plot[SIZE]
+
+DECLARE LOGICAL INT value[SIZE]
+
+DECLARE STRING output_value[SIZE]
+
+
+
+
+
+FOR T FROM 1 TO SIZE
+{
+
+
+
+
+
+frequency1[T]=velocity/(100*(1/num_of_cars_1[T]))
+
+frequency2[T]=velocity/(100*(1/num_of_cars_2[T]))
+
+angular_frequency[T]=2*3.142*(frequency1[T]+frequency2[T])
+
+
+f=sin(angular_frequency[T]*t)
+
+OUTPUT ""
+OUTPUT ""
+OUTPUT ""
+OUTPUT ""
+OUTPUT ""
+OUTPUT "The sine function of time ",T," is ",sine_function[T]=diff(f,t)
+
+sine_function_plot[T]=angular_frequency[T]*cos(angular_frequency[T]*T)
+
+
+value=(num_of_cars_2[T]>num_of_cars_1[T])
+
+
+
+
+
+IF num_of_cars_1[T]==0 AND num_of_cars_2[T]==0
+{
+
+
+
+
+
+OUTPUT "TIME:",T
+OUTPUT "[RED]"
+output_value="RED"
+
+
+IF T!=1
+{
+IF strcmp(output_value[T],prev_output_value)==0
+
+{OUTPUT ""
+OUTPUT "Traffic light UPDATED"
+OUTPUT ""}
+ENDIF
+}
+ENDIF
+
+
+
+
+
+}
+ENDIF
+
+
+
+
+
+IF num_of_cars_1[T]>0 OR num_of_cars_2[T]>0
+{
+
+
+
+
+
+
+IF num_of_cars_2[T]==0
+
+{
+OUTPUT "TIME:",T
+OUTPUT "[GREEN road 1, RED road 2]"
+output_value="GREEN road 1, RED road 2"
+
+IF T!=1
+{
+IF strcmp(output_value[T],prev_output_value)==0
+
+{OUTPUT ""
+OUTPUT "Traffic light UPDATED"
+OUTPUT ""}
+ENDIF
+}
+ENDIF
+
+}
+ENDIF
+
+
+
+
+
+IF num_of_cars_1[T]==0
+
+{
+OUTPUT "TIME:",T
+OUTPUT"[RED road 1, GREEN road 2]"
+output_value="RED road 1, GREEN road 2"
+
+IF T!=1
+{
+IF strcmp(output_value[T],prev_output_value)==0
+
+{OUTPUT ""
+OUTPUT "Traffic light UPDATED"
+OUTPUT ""}
+ENDIF
+}
+ENDIF
+
+}
+ENDIF
+
+
+
+
+
+}
+ENDIF
+
+
+
+
+
+
+IF num_of_cars_1[T]>0 AND num_of_cars_2[T]>0
+{
+
+
+
+
+
+SWITCH value
+{
+
+case 0:
+
+{OUTPUT "TIME:",T
+OUTPUT "[GREEN road 1, RED road 2]"
+output_value="GREEN road 1, RED road 2"
+
+IF T!=1
+{
+IF strcmp(output_value[T],prev_output_value)==0
+
+{OUTPUT ""
+OUTPUT "Traffic light UPDATED"
+OUTPUT ""}
+ENDIF
+}
+ENDIF}
+
+case 1:
+
+{OUTPUT "TIME:",T
+OUTPUT "[RED road 1, GREEN road 2]"
+output_value="RED road 1, GREEN road 2"
+
+IF T!=1
+{
+IF strcmp(output_value[T],prev_output_value)==0
+
+{OUTPUT ""
+OUTPUT "Traffic light UPDATED"
+OUTPUT ""}
+ENDIF
+}
+ENDIF}
+
+OTHERWISE
+OUTPUT "UNEXECPTED ERROR!"
+
+}
+ENDSWITCH
+
+}
+ENDIF
+
+
+
+
+
+}
+ENDFOR
+
+
+
+
+
+prev_output_value = output_value
+
+
+
+
+
+DECLARE INT x[SIZE], x1[SIZE], x2[SIZE]
+
+x[]=linspace(0,max(sine_function_plot[]),length(sine_function_plot[]))
+x1[]=linspace(0,max(frequency1[]),length(frequency1[]))
+x2[]=linspace(0,max(frequency2[]),length(frequency2[]))
+
+plot3(x,sine_function_plot[],x),ylabel('Sine Function'), legend('Sine function with respect to time'),grid on
+
+FIGURE
+
+subplot(1,2,1)
+plot(x1,frequency1[]),ylabel('Frequency (Hz)'),legend('Road 1 frequency'), grid on, hold
+
+subplot(1,2,2)
+plot(x2,frequency2[]),ylabel('Frequency (Hz)'),legend('Road 2 frequency'), grid on
+
+
+
+
+
+xlswrite('myXlFile.xlsx',num_of_cars[2,1])
+xlswrite('myXlFile.xlsx',num_of_cars[2,2])
+
+msgbox('The number of cars on the road has been written to an Excel file','Write operation')
